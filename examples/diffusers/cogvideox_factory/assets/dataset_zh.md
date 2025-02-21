@@ -69,3 +69,5 @@ huggingface-cli download --repo-type dataset Wild-Heart/Disney-VideoGeneration-D
 该数据集已按照预期格式准备好，可直接使用。但是，直接使用原始的视频数据集可能会导致较小内存的设备出现内存不足的报错，因为它需要加载 [VAE](https://huggingface.co/THUDM/CogVideoX-5b/tree/main/vae)（将视频编码至潜在空间）和大型 [T5-XXL](https://huggingface.co/google/t5-v1_1-xxl/)文本编码器。为了降低内存需求，您可以使用 `training/prepare_dataset.py` 脚本预先计算潜变量和词向量。
 
 填写或修改 `prepare_dataset.sh` 中的参数并执行它以获得预先计算的潜变量和词向量（请确保指定 `--save_latents_and_embeddings`以保存预计算结果）。如果准备从图像生成视频的训练，请确保传递 `--save_image_latents`以同时编码并存储图像与视频的潜变量。在训练期间使用这些工件时，确保指定 `--load_tensors` 标志，否则将直接使用视频并需要加载文本编码器和VAE。该脚本支持并行，以便可以使用多个设备并行编码大型数据集（修改 `NUM_NPUS` 参数）。
+
+### 分桶训练
